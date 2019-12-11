@@ -1,0 +1,12 @@
+.menu-bar {
+    -fx-background-color:transparent;
+    -fx-opacity: 1;
+}
+
+.menu:hover {
+    -fx-opacity: 0.5;
+}
+
+#homePage{
+    -fx-background-color:transparent;
+}

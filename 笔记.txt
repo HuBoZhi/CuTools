@@ -1,0 +1,16 @@
+高级查询：
+    百度的高级查询使用的是get方式
+    https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=baiduadv&wd=Javafx%20%E8%8F%9C%E5%8D%95%E6%A0%8F&ct=2097152&lm=200&si=(csdn.net)&oq=Javafx%20%E8%8F%9C%E5%8D%95%E6%A0%8F&rsv_pq=db8c73a900541a2b&rqlang=cn&rsv_enter=1&gpc=stf%3D1544445472%2C1575981472%7Cstftype%3D1&tfflag=1&bs=Javafx%20%E8%8F%9C%E5%8D%95%E6%A0%8F
+    * |  表示并行搜索
+
+    * site:(jianshu.com | csdn.net) Javafx 菜单栏
+
+    * inurl:指令用于搜索查询词出现在url中的页面，百度和Google都支持inurl指令，inurl指令支持中文和英文。
+
+    * 把搜索词放在双引号中（英文半角双引号），代表完全匹配搜索一个词，也就是说搜索结果返回的页面包含双引号中出
+    现的所有的词，连顺序也必须完全匹配，目前，百度和Google都支持这个指令，例如：搜索“SEO博客”。
+
+    * intitle: 指令返回的是页面title中包含关键词的页面，目前，百度和Google都支持intitle指令。
+      使用intitle指令找到的文件是更准确的竞争页面，如果关键词只出现在页面可见文字中，而没有出现在title中，大部分情况是并没有针对关键词进行优化，所以也不是有力的竞争对手。
+      Intitle命令-表示后接的词限制在网页标题范围内
+
