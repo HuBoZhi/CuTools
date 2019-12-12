@@ -34,7 +34,7 @@
                         <Button id="CloseBtn" fx:id="closeButton" maxHeight="30.0" maxWidth="70.0" minWidth="45.0" mnemonicParsing="false" onAction="#closeSystem" prefHeight="30.0" prefWidth="45.0" stylesheets="@../styles/MinAndClose.css" />
                      </children>
                   </HBox>
-                  <MenuBar prefHeight="16.0" prefWidth="702.0" stylesheets="@../styles/mainstyle.css">
+                  <MenuBar fx:id="menuBar" prefHeight="16.0" prefWidth="702.0" stylesheets="@../styles/mainstyle.css">
                     <menus>
                       <Menu mnemonicParsing="false" text="文件">
                         <items>
@@ -60,7 +60,7 @@
                   </MenuBar>
                </children>
             </GridPane>
-            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
+            <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
               <tabs>
                 <Tab text="搜索">
                   <content>
@@ -85,12 +85,12 @@
                                     </RadioButton>
                                  </children>
                               </HBox>
-                              <TextField layoutX="250.0" layoutY="286.0" prefHeight="48.0" prefWidth="700.0">
+                              <TextField fx:id="searchBody" layoutX="250.0" layoutY="286.0" prefHeight="48.0" prefWidth="700.0">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
                               </TextField>
-                              <Button layoutX="960.0" layoutY="286.0" mnemonicParsing="false" text="搜  索">
+                              <Button fx:id="search" layoutX="960.0" layoutY="286.0" mnemonicParsing="false" text="搜  索">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
