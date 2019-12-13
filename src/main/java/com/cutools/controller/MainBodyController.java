@@ -2,31 +2,29 @@ package com.cutools.controller;
 
 import com.cutools.launch.MainLauncher;
 import com.jfoenix.controls.JFXTabPane;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 
-import javax.swing.plaf.nimbus.State;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Map;
 
 /**
  * author: hubz
  * datetime: 2019/12/10 19:05
  */
+
 public class MainBodyController implements Initializable {
     final ToggleGroup group = new ToggleGroup();
     public RadioButton technology = new RadioButton();
@@ -42,36 +40,97 @@ public class MainBodyController implements Initializable {
 
     public ChoiceBox<String> choiceBox = new ChoiceBox<>();
 
-
+    private long oneDay = 86400;
+    private long oneMonth = 2592000;
+    private long oneYear = 31104000;
+    private String TYPE;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         winMoveSet();
+        technology.setOnAction(e->{ if(technology.isSelected()) TYPE="technology";});
+        popsci.setOnAction(e->{if(popsci.isSelected()) TYPE="popsci";});
+        life.setOnAction(e->{if(life.isSelected()) TYPE="life";});
 
         technology.setToggleGroup(group);
         popsci.setToggleGroup(group);
         life.setToggleGroup(group);
         technology.setSelected(true);
 
-        choiceBox.setItems(FXCollections.observableArrayList("不限时间","一天内","一周内",
-                                    "一月内","一年内","两年内","三年内"));
+        choiceBox.setItems(FXCollections.observableArrayList("三年内","两年内","一年内","三月内",
+                "一月内","一周内","一天内","不限时间"));
         choiceBox.getSelectionModel().select(0);
-
         search.setOnMouseClicked(new searchHandler());
 
-        loadProperties();
+    }
+    private Map<String,Long> getTime(String type){
+        Map<String,Long> res = new HashMap<>();
+        long curTime = System.currentTimeMillis()/1000;
+        switch(type){
+            case "三年内":{
+                res.put("start",curTime - 3*oneYear);
+                res.put("end",curTime);
+                break;
+            }
+            case "两年内":{
+                res.put("start",curTime - 2*oneYear);
+                res.put("end",curTime);
+                break;
+            }
+            case "一年内":{
+                res.put("start",curTime - oneYear);
+                res.put("end",curTime);
+                break;
+            }
+            case "三月内":{
+                res.put("start",curTime - 3*oneMonth);
+                res.put("end",curTime);
+                break;
+            }
+            case "一月内":{
+                res.put("start",curTime - oneMonth);
+                res.put("end",curTime);
+                break;
+            }
+            case "一周内":{
+                res.put("start",curTime - 7*oneDay);
+                res.put("end",curTime);
+                break;
+            }
+            case "一天内":{
+                res.put("start",curTime - oneDay);
+                res.put("end",curTime);
+                break;
+            }
+            case "不限时间":{
+                res.put("start",0L);
+                res.put("end",curTime);
+                break;
+            }
+        }
+        return res;
     }
     private class searchHandler implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {
             String ques = searchBody.getText();
             if(!ques.equals("")) {
-                Tab tab = new Tab(ques);
-                final WebView browser = new WebView();
-                final WebEngine webEngine = browser.getEngine();
-                tab.setContent(browser);
-                String url = "";
-                webEngine.load("http://www.baidu.com");
-                tabPane.getTabs().add(tab);
+                String chrome = getPropertiesData("chrome");
+                String site = getPropertiesData(TYPE);
+                String type = choiceBox.getSelectionModel().getSelectedItem();
+                Map<String,Long> time = getTime(type);
+
+                if(!chrome.equals("")){
+                    try {
+                        String site_ques = "site:("+site+") "+URLEncoder.encode(ques);
+                        String gpc = "stf%3D"+time.get("start")+"%2C"+time.get("end")+"%7Cstftype%3D2";
+                        String url = "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=baiduadv&wd="+site_ques+
+                                "&oq="+site_ques+"&rqlang=cn&rsv_enter=1&gpc="+gpc+"&tfflag=1&bs="+site_ques;
+                        Runtime.getRuntime().exec(new String[]{chrome,"--new-window",url});
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
             }
         }
     }
@@ -93,18 +152,17 @@ public class MainBodyController implements Initializable {
     }
 
     @FXML
-    public void loadProperties() {
+    private String getPropertiesData(String key) {
         try {
             Properties pro = new Properties();
             FileInputStream in = new FileInputStream(System.getProperty("user.dir")+"/src/main/resources/conf/a.properties");
             pro.load(in);
-            String s = pro.getProperty("technology");
-            System.out.println(s);
-
+            String value = pro.getProperty(key);
             in.close();
+            return value;
         }
         catch(IOException e){
-            e.printStackTrace();
+            return null;
         }
     }
 
